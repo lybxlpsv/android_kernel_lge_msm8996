@@ -65,6 +65,9 @@ enum TOUCH_DEBUG {
 };
 
 #define TOUCH_I(fmt, args...)					\
+	do {} while(0)
+
+#define TOUCH_II(fmt, args...)					\
 	pr_info("[Touch] "					\
 			fmt, ##args)
 
