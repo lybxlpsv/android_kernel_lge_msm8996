@@ -5928,6 +5928,9 @@ module_param(vf_adjust_max_delta_mv, int, 0644);
 static int vf_adjust_trim_steps_per_adjust = 1;
 module_param(vf_adjust_trim_steps_per_adjust, int, 0644);
 
+static int lyb_force_hvdcp = 0;
+module_param(lyb_force_hvdcp, int, 0644);
+
 #define CENTER_TRIM_CODE		7
 #define MAX_LIN_CODE			14
 #define MAX_TRIM_CODE			15
@@ -6449,6 +6452,20 @@ static void smbchg_hvdcp_det_prepare_work(struct work_struct *work)
 	}
 #endif
 
+if (lyb_force_hvdcp == 2)
+{
+  pr_smb(PR_LGE, "lybxlpsv ignore HVDCP\n");
+  goto out;
+}
+
+if (lyb_force_hvdcp == 1)
+{
+  pr_smb(PR_LGE, "lybxlpsv force HVDCP\n");
+  goto prepare_hvdcp_detection;
+}
+
+if (lyb_force_hvdcp == 0)
+{
 #ifdef CONFIG_LGE_USB_ANX7688_ADC
 	if (!chip->ctype_rp) {
 		if (chip->hvdcp_det_retry >= HVDCP_RETRY_MAX) {
@@ -6482,7 +6499,7 @@ static void smbchg_hvdcp_det_prepare_work(struct work_struct *work)
 		return;
 	}
 #endif
-
+}
 #if defined(CONFIG_LGE_USB_FACTORY) || !defined(CONFIG_MACH_MSM8996_LUCYE)
 prepare_hvdcp_detection:
 #endif
